@@ -3,11 +3,8 @@ import streamlit as st
 
 def create_ui():
     st.markdown(
-        '<h2 class="section-title">📋 Shipment Information</h2>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<p class="section-subtitle">'
+        '<h2 class="section-title" style="text-align:center;justify-content:center;">📋 Shipment Information</h2>'
+        '<p class="section-subtitle" style="text-align:center;">'
         "Enter the shipment details below to predict whether it will arrive on time.</p>",
         unsafe_allow_html=True,
     )
@@ -80,6 +77,7 @@ def create_ui():
             unsafe_allow_html=True,
         )
         st.markdown("</div>", unsafe_allow_html=True)
+
 
     return (
         warehouse,

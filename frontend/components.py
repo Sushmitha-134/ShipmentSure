@@ -105,26 +105,10 @@ def render_sidebar():
 def render_hero():
     st.markdown(
         """
-        <div class="hero-section">
-            <div class="hero-badge">
-                ⚡ AI-Powered Analytics
-            </div>
-            <h1 class="hero-title">🚚 ShipmentSure</h1>
-            <div class="hero-tagline">AI-Powered Shipment Delay Prediction</div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-value">68%</span>
-                    <span class="hero-stat-label">Model Accuracy</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">18</span>
-                    <span class="hero-stat-label">Features</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">10,999</span>
-                    <span class="hero-stat-label">Dataset Records</span>
-                </div>
-            </div>
+        <div class="hero-center">
+            <div class="hero-badge">⚡ AI-Powered Analytics</div>
+            <div class="hero-title">🚚 ShipmentSure</div>
+            <div class="hero-subtitle">AI-Powered Shipment Delay Prediction</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -132,53 +116,19 @@ def render_hero():
 
 
 def render_kpi_cards():
-    st.markdown(
-        '<h2 class="section-title">📊 Key Metrics</h2>',
-        unsafe_allow_html=True,
-    )
-
     kpis = [
-        {
-            "icon": "🎯",
-            "value": "68%",
-            "label": "Model Accuracy",
-            "change": "+2.5%",
-            "change_class": "positive",
-            "desc": "Cross-validated XGBoost score",
-        },
-        {
-            "icon": "🧩",
-            "value": "18",
-            "label": "Input Features",
-            "change": "Engineered",
-            "change_class": "neutral",
-            "desc": "Raw + derived attributes",
-        },
-        {
-            "icon": "📦",
-            "value": "10,999",
-            "label": "Dataset Records",
-            "change": "Analyzed",
-            "change_class": "neutral",
-            "desc": "Historical shipment records",
-        },
+        ("🎯", "68%", "Model Accuracy"),
+        ("🧩", "18", "Input Features"),
+        ("📦", "10,999", "Dataset Records"),
     ]
-
     cols = st.columns(3)
-    for col, kpi in zip(cols, kpis):
+    for col, (icon, value, label) in zip(cols, kpis):
         with col:
             st.markdown(
                 f"""
                 <div class="kpi-card">
-                    <div class="kpi-card-header">
-                        <div class="kpi-card-icon">{kpi["icon"]}</div>
-                        <span class="kpi-card-change {kpi['change_class']}">
-                            {kpi["change"]}
-                        </span>
-                    </div>
-                    <div class="kpi-card-value">{kpi["value"]}</div>
-                    <div class="kpi-card-label">{kpi["label"]}</div>
-                    <div class="kpi-card-desc">{kpi["desc"]}</div>
+                    <div class="kpi-card-value">{value}</div>
+                    <div class="kpi-card-label">{label}</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -197,23 +147,37 @@ def get_risk_level(delay_prob):
 def render_prediction_result(prediction, probability):
     delay_prob = probability[1] * 100
     ontime_prob = probability[0] * 100
+    confidence = max(ontime_prob, delay_prob)
 
     is_delayed = prediction == 1
     status_text = "Delayed" if is_delayed else "On Time"
-    status_class = "result-compact-delayed" if is_delayed else "result-compact-ontime"
+    status_class = "result-delayed" if is_delayed else "result-ontime"
     status_icon = "🚨" if is_delayed else "✅"
+    border_color = "#ef4444" if is_delayed else "#22c55e"
     risk_icon, risk_label = get_risk_level(delay_prob)
 
     st.markdown(
         f"""
-        <div class="result-compact {status_class}">
-            <div class="result-compact-row">
-                <span class="result-compact-status">{status_icon} Shipment Likely {status_text}</span>
-                <span class="result-compact-risk">{risk_icon} {risk_label}</span>
+        <div class="result-card" style="border-color:{border_color};">
+            <div class="result-header">
+                <span class="result-icon">{status_icon}</span>
+                <span class="result-status {status_class}">Shipment Likely {status_text}</span>
             </div>
-            <div class="result-compact-probs">
-                <span>On-Time: <strong>{ontime_prob:.1f}%</strong></span>
-                <span>Delay: <strong>{delay_prob:.1f}%</strong></span>
+            <div class="result-risk-badge {status_class}">{risk_icon} {risk_label}</div>
+            <div class="result-divider"></div>
+            <div class="result-confidence">
+                <span class="result-confidence-label">Confidence Score</span>
+                <span class="result-confidence-value">{confidence:.1f}%</span>
+            </div>
+            <div class="result-bar">
+                <div class="result-bar-fill result-bar-ontime" style="width:{ontime_prob:.1f}%;"></div>
+            </div>
+            <div class="result-bar-label">
+                <span>✅ On-Time: {ontime_prob:.1f}%</span>
+                <span>🚨 Delay: {delay_prob:.1f}%</span>
+            </div>
+            <div class="result-bar">
+                <div class="result-bar-fill result-bar-delayed" style="width:{delay_prob:.1f}%;"></div>
             </div>
         </div>
         """,
@@ -421,15 +385,8 @@ def render_footer():
     st.markdown(
         """
         <div class="footer">
-            <div class="footer-brand">
-                <span>ShipmentSure</span>
-            </div>
-            <div class="footer-text">
-                ShipmentSure &copy; 2026
-            </div>
-            <div class="footer-subtext">
-                Built using Streamlit, XGBoost and Scikit-Learn
-            </div>
+            <div>ShipmentSure &copy; 2026</div>
+            <div>Built with Streamlit &bull; XGBoost &bull; Scikit-Learn</div>
         </div>
         """,
         unsafe_allow_html=True,
