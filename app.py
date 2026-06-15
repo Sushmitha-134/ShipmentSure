@@ -61,7 +61,8 @@ if st.button("🚀 Predict Shipment Status", width='stretch'):
 
     prediction, probability = predict(data)
     render_prediction_result(prediction, probability)
-    render_feature_importance()
+    with st.expander("📈 Feature Importance"):
+        render_feature_importance()
 
     delay_prob = probability[1] * 100
     st.session_state.prediction_history.insert(0, {

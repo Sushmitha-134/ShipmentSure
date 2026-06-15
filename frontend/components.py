@@ -197,58 +197,23 @@ def get_risk_level(delay_prob):
 def render_prediction_result(prediction, probability):
     delay_prob = probability[1] * 100
     ontime_prob = probability[0] * 100
-    confidence = max(probability) * 100
 
     is_delayed = prediction == 1
     status_text = "Delayed" if is_delayed else "On Time"
-    status_class = "result-delayed" if is_delayed else "result-ontime"
+    status_class = "result-compact-delayed" if is_delayed else "result-compact-ontime"
     status_icon = "🚨" if is_delayed else "✅"
     risk_icon, risk_label = get_risk_level(delay_prob)
 
     st.markdown(
         f"""
-        <div class="result-card {status_class}">
-            <div class="result-header">
-                <div class="result-icon">{status_icon}</div>
-                <div>
-                    <div class="result-title">Shipment Likely {status_text}</div>
-                    <div class="result-subtitle">Based on trained XGBoost model analysis</div>
-                </div>
+        <div class="result-compact {status_class}">
+            <div class="result-compact-row">
+                <span class="result-compact-status">{status_icon} Shipment Likely {status_text}</span>
+                <span class="result-compact-risk">{risk_icon} {risk_label}</span>
             </div>
-            <div class="result-risk-badge">
-                {risk_icon} {risk_label}
-            </div>
-            <div class="result-probabilities">
-                <div class="result-prob-item">
-                    <div class="result-prob-label">On-Time Probability</div>
-                    <div class="result-prob-value ontime">{ontime_prob:.1f}%</div>
-                </div>
-                <div class="result-prob-item">
-                    <div class="result-prob-label">Delay Probability</div>
-                    <div class="result-prob-value delay">{delay_prob:.1f}%</div>
-                </div>
-                <div class="result-prob-item">
-                    <div class="result-prob-label">Confidence Score</div>
-                    <div class="result-prob-value confidence">{confidence:.1f}%</div>
-                </div>
-            </div>
-            <div class="result-progress-container">
-                <div class="result-progress-row">
-                    <span class="result-progress-label">On Time</span>
-                    <div class="result-progress-bar-bg">
-                        <div class="result-progress-bar-fill ontime"
-                             style="width: {ontime_prob:.1f}%"></div>
-                    </div>
-                    <span class="result-progress-value">{ontime_prob:.1f}%</span>
-                </div>
-                <div class="result-progress-row">
-                    <span class="result-progress-label">Delayed</span>
-                    <div class="result-progress-bar-bg">
-                        <div class="result-progress-bar-fill delay"
-                             style="width: {delay_prob:.1f}%"></div>
-                    </div>
-                    <span class="result-progress-value">{delay_prob:.1f}%</span>
-                </div>
+            <div class="result-compact-probs">
+                <span>On-Time: <strong>{ontime_prob:.1f}%</strong></span>
+                <span>Delay: <strong>{delay_prob:.1f}%</strong></span>
             </div>
         </div>
         """,
@@ -258,11 +223,7 @@ def render_prediction_result(prediction, probability):
 
 def render_feature_importance():
     st.markdown(
-        '<h2 class="section-title">📈 Feature Importance</h2>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<p class="section-subtitle">'
+        '<p class="section-subtitle" style="margin-top:0;">'
         "How each input feature influences the delay prediction.</p>",
         unsafe_allow_html=True,
     )
