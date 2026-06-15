@@ -286,16 +286,16 @@ p {
 }
 
 .hero-title {
-    font-size: 2.2rem;
+    font-size: 2.8rem;
     font-weight: 900;
     color: var(--text-primary);
     letter-spacing: -0.04em;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
     line-height: 1.1;
 }
 
 .hero-subtitle {
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 500;
     color: var(--text-muted);
 }
@@ -429,6 +429,7 @@ p {
     padding: 1.25rem 1.5rem;
     margin-bottom: 1rem;
     transition: var(--transition);
+    text-align: center;
 }
 
 .form-card:hover {
@@ -446,6 +447,15 @@ p {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    justify-content: center;
+}
+
+.form-card .stSelectbox,
+.form-card .stNumberInput {
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
 }
 
 /* Streamlit Input Overrides */
@@ -461,6 +471,7 @@ p {
     border: 1px solid var(--border-color) !important;
     border-radius: var(--radius-sm) !important;
     color: var(--text-primary) !important;
+    font-size: 0.75rem !important;
     transition: var(--transition) !important;
 }
 
@@ -479,6 +490,7 @@ p {
     border: 1px solid var(--border-color) !important;
     border-radius: var(--radius-sm) !important;
     color: var(--text-primary) !important;
+    font-size: 0.75rem !important;
     transition: var(--transition) !important;
 }
 

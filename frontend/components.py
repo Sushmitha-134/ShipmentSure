@@ -246,12 +246,12 @@ def render_prediction_history():
         unsafe_allow_html=True,
     )
 
-    cols = st.columns([2, 1.5, 1.5, 1.2, 1.2, 0.8])
+    cols = st.columns([1.5, 1.2, 1.2, 1, 1, 0.6])
     headers = ["Date", "Warehouse", "Shipment Mode", "Prediction", "Delay Prob", ""]
     for col, header in zip(cols, headers):
         col.markdown(
-            f"<div style='font-size:0.65rem;font-weight:600;color:#606080;"
-            f"text-transform:uppercase;letter-spacing:0.06em;padding:0.4rem 0.5rem;'>"
+            f"<div style='font-size:0.6rem;font-weight:600;color:#606080;"
+            f"text-transform:uppercase;letter-spacing:0.06em;padding:0.25rem 0.4rem;'>"
             f"{header}</div>",
             unsafe_allow_html=True,
         )
@@ -273,9 +273,9 @@ def render_prediction_history():
         bg = "#111122" if i % 2 == 0 else "#0c0c18"
         for col, val in zip(cols, vals):
             style = (
-                f"font-size:0.78rem;color:{color};font-weight:600;padding:0.4rem 0.5rem;"
+                f"font-size:0.72rem;color:{color};font-weight:600;padding:0.25rem 0.4rem;"
                 if val in ("Delayed", "On Time") and col == cols[3]
-                else f"font-size:0.78rem;color:#9090b0;padding:0.4rem 0.5rem;"
+                else f"font-size:0.72rem;color:#9090b0;padding:0.25rem 0.4rem;"
             )
             col.markdown(
                 f"<div style='background:{bg};border-radius:4px;{style}'>{val}</div>",
